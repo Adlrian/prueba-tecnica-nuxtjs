@@ -1,11 +1,15 @@
 # prueba-tecnica-nuxtjs
 
+```bash
+# Auto: Adrian Quiroz
+```
+
 ## Pre-requisitos deploy en local
 ```bash
 # 1. node - LTS version
 # 2. editor de texto - VS o sublime
 # 3. terminal integrada
-# 4. plugin para controll de acceso de cors-origin
+# 4. plugin para control de acceso de cors-origin
 ```
 
 ## Instrucciones

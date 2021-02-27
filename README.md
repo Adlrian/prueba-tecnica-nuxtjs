@@ -1,10 +1,17 @@
 # prueba-tecnica-nuxtjs
-Ejemplo lanzado en:
+
+## Pre-requisitos deploy en local
+```bash
+# 1. node - LTS version
+# 2. editor de texto - VS o sublime
+# 3. terminal integrada
+# 4. plugin para controll de acceso de cors-origin
+```
 
 ## Instrucciones
 ```bash
 # clonar el repositorio
-$ git clone 
+$ git clone https://github.com/Adlrian/prueba-tecnica-nuxtjs.git
 
 # instalar dependencias
 $ npm install
@@ -16,6 +23,6 @@ $ npm run dev
 $ npm run build
 $ npm run start
 
-# generar proyecto estatico
+# generar proyecto estatico (sw no disponible)
 $ npm run generate
 ```

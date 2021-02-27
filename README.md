@@ -1,7 +1,7 @@
 # prueba-tecnica-nuxtjs
 
 ```bash
-# Auto: Adrian Quiroz
+# Autor: Adrian Quiroz
 ```
 
 ## Pre-requisitos deploy en local

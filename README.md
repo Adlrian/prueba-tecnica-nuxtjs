@@ -1,20 +1,21 @@
 # prueba-tecnica-nuxtjs
+Ejemplo lanzado en:
 
-## Build Setup
-
+## Instrucciones
 ```bash
-# install dependencies
+# clonar el repositorio
+$ git clone 
+
+# instalar dependencias
 $ npm install
 
-# serve with hot reload at localhost:3000
+# compilar con hot reaload en localhost:3000
 $ npm run dev
 
-# build for production and launch server
+# compilar para produccion y lanzar
 $ npm run build
 $ npm run start
 
-# generate static project
+# generar proyecto estatico
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

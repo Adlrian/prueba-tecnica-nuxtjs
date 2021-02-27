@@ -74,7 +74,6 @@
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
-import api from '@/api/main'
 
 export default {
   components: {
@@ -82,6 +81,7 @@ export default {
     VuetifyLogo
   },
   data: () => ({
+      title:'CAPTURA DE DATOS',
       loading: false,
       valid: true,
       genders: ['Masculino', 'Femenino'],
@@ -98,70 +98,26 @@ export default {
       showMsgOffline: false,
   }),
   async mounted() {
-    console.log(navigator)
-    //const tags = await self.registration.sync.getTags();
-
-    await self.addEventListener('fetch', async (event) => {
-      // Handle event...
-
-      // Afterwards...
-      const tags = await self.registration.sync.getTags();
-      if (tags.length === 0) {
-        // There are no registered tags.
-      }
-
-    });
-    const workbox = await window.$workbox
-       if (workbox) {
-         const asd = await workbox.getSW()
-       console.log(asd)
-       workbox.addEventListener('message', (event) => {
-           alert('event update')
-         // If we don't do this we'll be displaying the notification after the initial installation, which isn't perferred.
-         if (event.isUpdate) {
-           // whatever logic you want to use to notify the user that they need to refresh the page.
-           alert('event update')
-         }
-       });
-      }
+    this.$store.commit('main/setTitlePage',this.title)
   },
   methods: {
     async btnSendData() {
+      let db = new Localbase('workbox-background-sync')
       this.loading = true;
       this.text = "Ocurrió un error.";
-
       await this.validate();
-      // const queue = workbox.backgroundSync.Queue('formQueue', {
-      // onSync: async (queue) => {
-      //     let entry;
-      //     while (entry = await this.shiftRequest()) {
-      //       try {
-      //         await fetch(entry.request);
-      //         console.error('Replay successful for request', entry.request);
-      //       } catch (error) {
-      //         console.error('Replay failed for request', entry.request, error);
-
-      //         // Put the entry back in the queue and re-throw the error:
-      //         await this.unshiftRequest(entry);
-      //         throw error;
-      //       }
-      //     }
-      //     console.log('Replay complete!');
-      //   }
-      // });
-
       if(this.valid){
         try {
-          //const workbox = await window.$workbox
-          //console.log(workbox)
           let resp = await this.$axios.$put(`https://postman-echo.com/put`,this.objForm)
           if (resp.data) {
             this.text = "Se envió la data correctamente."
             this.snackbar = true;
           }
         } catch (error) {
-          console.log("====================================")
           console.log("ERROR:"+error.message)
+          db.collection('requests').get().then(req => {
+            this.$store.commit('main/updatePendingData',req.length)
+          })
           this.snackbar = true
         }
       }

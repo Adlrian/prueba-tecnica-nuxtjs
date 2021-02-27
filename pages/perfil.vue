@@ -6,7 +6,7 @@
       class="mb-4 border-gray mt-10"
       >
       <v-img
-        src="https://www.rutanmedellin.org/images/1pruebas/foto-persona.jpg"
+        src="imgphoto.jpg"
       ></v-img>
       </v-avatar>
       <br>
@@ -23,11 +23,17 @@
 <script>
 export default {
   data: () => ({
-      name: null
+      name: null,
+      title: 'MI PERFIL'
   }),
-  async created() {
-    var profile = await this.$axios.$get(`https://jsonplaceholder.typicode.com/users/1/`)
-    this.name = profile.name;
+  async mounted() {
+    this.$store.commit('main/setTitlePage',this.title)
+  },
+  async created() {    
+    if(navigator.onLine){
+      var profile = await this.$axios.$get(`https://jsonplaceholder.typicode.com/users/1/`)
+      this.name = profile.name;
+    }
   }
 }
 </script>

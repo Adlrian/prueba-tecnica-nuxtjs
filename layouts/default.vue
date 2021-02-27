@@ -8,8 +8,16 @@
       color="white"
     >
       <v-app-bar-nav-icon @click.stop="leftDrawer = !leftDrawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title class="title" v-text="this.$store.state.main.titlePage" />
       <v-spacer />
+        <v-btn
+          icon
+          color="black"
+          dark
+          @click="openDialog()"
+        >
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -47,9 +55,6 @@
           router
           exact
         >
-          <!-- <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action> -->
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
@@ -63,32 +68,64 @@
       </template>
     </v-navigation-drawer>
     <div class="box-offline" v-show="!this.$store.state.main.isOnline">
-      <span class="text-offline">MODO OFFLINE</span>
-      <span class="text-offline">PENDIENTES (0)</span>
+      <span class="text-offline">Modo Offline</span>
+      <span class="text-offline">Envíos pendientes: {{this.$store.state.main.isPending}}</span>
     </div>
-    <!-- <v-footer
-      :absolute="!fixed"
-      app
+
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer> -->
+      <v-card>
+        <v-card-title class="headline">
+          Información
+        </v-card-title>
+          
+        <v-card-text>
+          <div class="flex">
+            <span>Conexión a internet:</span> <span>{{this.$store.state.main.isOnline?"SI":"NO"}}</span>
+          </div>
+          <div class="flex">
+            <span>Envíos pendientes:</span> <span>{{this.$store.state.main.isPending}}</span>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Cerrar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 export default {
+  head() {
+      return {
+        script: [
+          {
+            src: 'https://unpkg.com/localbase/dist/localbase.dev.js'
+          }
+        ],
+      }
+  },
   data () {
     return {
+      dialog: false,
       clipped: false,
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
           title: 'Captura de datos',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
           title: 'Mi perfil',
           to: '/perfil'
         }
@@ -97,18 +134,39 @@ export default {
       right: true,
       left: true,
       leftDrawer: false,
-      title: 'Vuetify.js',
       online: false
     }
   },
   mounted() {
+    let db = new Localbase('workbox-background-sync')
+    db.collection('requests').get().then(req => {
+      this.$store.commit('main/updatePendingData',req.length)
+    })
+
     this.online = navigator.onLine
     this.$store.commit('main/setData',this.online)
-    self.addEventListener('online', ()=> this.$store.commit('main/toOnline'));
-    self.addEventListener('offline',()=> this.$store.commit('main/toOffline'));
-    self.addEventListener('fetch',()=> console.log('laputamdre================'));
-
+    self.addEventListener('online', ()=> {
+      this.$store.commit('main/toOnline')
+      db.collection('requests').get().then(req => {
+        this.$store.commit('main/updatePendingData',req.length)
+      })
+    });
+    self.addEventListener('offline',()=> {
+      this.$store.commit('main/toOffline')
+      db.collection('requests').get().then(req => {
+        this.$store.commit('main/updatePendingData',req.length)
+      })
+    });
   },
+  methods:{
+    openDialog(){
+      let db = new Localbase('workbox-background-sync')
+      db.collection('requests').get().then(req => {
+        this.$store.commit('main/updatePendingData',req.length)
+      })
+      this.dialog = true
+    }
+  }
 }
 </script>
 <style>

@@ -1,5 +1,7 @@
 export const state = () => ({
-    isOnline: true 
+    isOnline: true,
+    isPending: 0,
+    titlePage: 'CAPTURA DE DATOS'
 })
 
 export const mutations = {
@@ -11,5 +13,11 @@ export const mutations = {
     },
     toOffline(state) {
       state.isOnline = false
+    },
+    updatePendingData(state,data){
+      state.isPending = data
+    },
+    setTitlePage(state,data){
+      state.titlePage = data
     }
 }

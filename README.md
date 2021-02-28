@@ -27,6 +27,6 @@ $ npm run dev
 $ npm run build
 $ npm run start
 
-# generar proyecto estatico (sw no disponible)
+# generar proyecto estatico
 $ npm run generate
 ```
